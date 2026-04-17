@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\VS\\Lab7\\Lab7\\Lab7.Api\\Lab7.Api.csproj": {}
+    "C:\\VS\\Lab7\\task-7\\Lab7.Api\\Lab7.Api.csproj": {}
   },
   "projects": {
-    "C:\\VS\\Lab7\\Lab7\\Lab7.Api\\Lab7.Api.csproj": {
+    "C:\\VS\\Lab7\\task-7\\Lab7.Api\\Lab7.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\VS\\Lab7\\Lab7\\Lab7.Api\\Lab7.Api.csproj",
+        "projectUniqueName": "C:\\VS\\Lab7\\task-7\\Lab7.Api\\Lab7.Api.csproj",
         "projectName": "Lab7.Api",
-        "projectPath": "C:\\VS\\Lab7\\Lab7\\Lab7.Api\\Lab7.Api.csproj",
+        "projectPath": "C:\\VS\\Lab7\\task-7\\Lab7.Api\\Lab7.Api.csproj",
         "packagesPath": "C:\\Users\\Sancho\\.nuget\\packages\\",
-        "outputPath": "C:\\VS\\Lab7\\Lab7\\Lab7.Api\\obj\\",
+        "outputPath": "C:\\VS\\Lab7\\task-7\\Lab7.Api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

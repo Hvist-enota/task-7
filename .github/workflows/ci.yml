@@ -10,8 +10,15 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  build:
+  build-api:
     name: Build API
     if: >-
       (github.event_name == 'push' &&
@@ -36,14 +43,14 @@ jobs:
         run: dotnet build Lab7.sln --configuration Release --no-restore
 
   api-tests:
-    name: API Tests (k6)
+    name: API Tests
     if: >-
       (github.event_name == 'push' &&
       (startsWith(github.ref_name, 'feature/') || startsWith(github.ref_name, 'fix/') || github.ref_name == 'main')) ||
       (github.event_name == 'pull_request' &&
       (startsWith(github.head_ref, 'feature/') || startsWith(github.head_ref, 'fix/')))
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-api
 
     services:
       postgres:
@@ -69,38 +76,25 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: Setup k6
-        uses: grafana/setup-k6-action@v1
+      - name: Restore
+        run: dotnet restore Lab7.sln
 
-      - name: Start API
+      - name: Run API tests
         env:
+          USE_EXTERNAL_DB_FOR_API_TESTS: true
           ConnectionStrings__DefaultConnection: Host=localhost;Port=5432;Database=Lab7;Username=postgres;Password=postgres
           Seed__Count: 100
-        run: |
-          dotnet run --project Lab7.Api/Lab7.Api.csproj --configuration Release --urls http://localhost:5000 > api.log 2>&1 &
-          for i in {1..60}; do
-            if curl -fsS http://localhost:5000/api/students > /dev/null; then
-              break
-            fi
-            sleep 2
-          done
-
-      - name: Run k6 smoke test
-        run: k6 run tests/smoke_test.js
-
-      - name: Print API logs on failure
-        if: failure()
-        run: cat api.log
+        run: dotnet test Lab7.Api.Tests/Lab7.Api.Tests.csproj --configuration Release --no-restore --filter "Category=Api"
 
   container-db-tests:
-    name: Container / DB Tests (Testcontainers)
+    name: Container / DB Tests
     if: >-
       (github.event_name == 'push' &&
       (startsWith(github.ref_name, 'feature/') || startsWith(github.ref_name, 'fix/') || github.ref_name == 'main')) ||
       (github.event_name == 'pull_request' &&
       (startsWith(github.head_ref, 'feature/') || startsWith(github.head_ref, 'fix/')))
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-api
 
     steps:
       - name: Checkout
@@ -125,7 +119,7 @@ jobs:
       (github.event_name == 'pull_request' &&
       (startsWith(github.head_ref, 'feature/') || startsWith(github.head_ref, 'fix/')))
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-api
 
     services:
       postgres:
@@ -163,29 +157,5 @@ jobs:
       - name: Apply migrations
         env:
           ConnectionStrings__DefaultConnection: Host=localhost;Port=5432;Database=Lab7;Username=postgres;Password=postgres
+          Seed__Count: 0
         run: dotnet ef database update --project Lab7.Api/Lab7.Api.csproj --startup-project Lab7.Api/Lab7.Api.csproj
-
-  integration-api-tests:
-    name: Integration API Tests (.NET)
-    if: >-
-      (github.event_name == 'push' &&
-      (startsWith(github.ref_name, 'feature/') || startsWith(github.ref_name, 'fix/') || github.ref_name == 'main')) ||
-      (github.event_name == 'pull_request' &&
-      (startsWith(github.head_ref, 'feature/') || startsWith(github.head_ref, 'fix/')))
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 10.0.x
-
-      - name: Restore
-        run: dotnet restore Lab7.sln
-
-      - name: Run integration API tests
-        run: dotnet test Lab7.Api.Tests/Lab7.Api.Tests.csproj --configuration Release --no-restore --filter "Category=Api"

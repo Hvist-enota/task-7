@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Gq6zZwVIF8E=",
+  "dgSpecHash": "xQ3oB5kty90=",
   "success": true,
-  "projectFilePath": "C:\\VS\\Lab7\\Lab7\\Lab7.Api\\Lab7.Api.csproj",
+  "projectFilePath": "C:\\VS\\Lab7\\task-7\\Lab7.Api\\Lab7.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Sancho\\.nuget\\packages\\autofixture\\4.18.1\\autofixture.4.18.1.nupkg.sha512",
     "C:\\Users\\Sancho\\.nuget\\packages\\fare\\2.1.1\\fare.2.1.1.nupkg.sha512",
