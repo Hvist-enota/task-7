@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "LMWZfn3o8vk=",
+  "dgSpecHash": "Bzyk4J0RwSo=",
   "success": true,
-  "projectFilePath": "C:\\VS\\Lab7\\Lab7\\Lab7.Api.Tests\\Lab7.Api.Tests.csproj",
+  "projectFilePath": "C:\\VS\\Lab7\\task-7\\Lab7.Api.Tests\\Lab7.Api.Tests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Sancho\\.nuget\\packages\\autofixture\\4.18.1\\autofixture.4.18.1.nupkg.sha512",
     "C:\\Users\\Sancho\\.nuget\\packages\\bouncycastle.cryptography\\2.4.0\\bouncycastle.cryptography.2.4.0.nupkg.sha512",
